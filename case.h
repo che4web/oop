@@ -17,6 +17,7 @@ public:
     int NumPoint;
     double Lx;
     Vec T;
+    Vec dT;
     
     double dt;
     double h;

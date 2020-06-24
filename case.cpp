@@ -2,6 +2,24 @@
 #include <fstream>
 #include <iomanip>
 
+
+void diff(Vec& T,Vec& dT){
+    for(size_t i =1 ; i< T.size()-2;i++)
+       dT[i] = T[i+1]+T[i-1]-2*T[i];
+    //dT = T.shift(-1) + T.shift(1) -T*2.0;
+   // dT[0]=0;
+    //dT[T.size()-1]=0;
+}
+
+Vec diff(Vec& T){
+    Vec tmp(0.0,T.size()); 
+    for(size_t i =1 ; i< T.size()-2;i++)
+    {
+       tmp[i] = T[i+1]+T[i-1]-2*T[i];
+    }
+    return tmp;
+} 
+
 Case::Case(int N, double L)
 {
     Lx =L;
@@ -9,15 +27,21 @@ Case::Case(int N, double L)
     h = L/N;
     dt = h*h/4.0;
     T = Vec(0.0,NumPoint);
+    dT = Vec(0.0,NumPoint);
 
 
 };
 void Case::step()
 {
-    for(size_t i =1 ; i< T.size()-2;i++)
-    {
-        T[i] = T[i] +dt*(T[i+1]+T[i-1]-2*T[i])/(h*h);
-    }
+    double  tay = dt/(h*h);
+    //for(size_t i =1 ; i< T.size()-2;i++)
+   // {
+   //     T[i] = T[i] +(T[i+1]+T[i-1]-2*T[i])*tay;
+   // }
+    
+        dT = diff(T);
+        //diff(T,dT);
+        T = T +dT*tay;
 
 };
 void Case::setInitial(Vec T_in)
